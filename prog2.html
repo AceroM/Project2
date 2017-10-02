@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <style type="text/css">
+/* @import url(https://fonts.googleapis.com/css?family=Vollkorn:400,400italic,700,700italic&subset=latin); */
+@import url(https://fonts.googleapis.com/css?family=Lato:400,700,400italic); html, body {
+padding:1em;
+margin:auto;
+max-width:42em;
+background:#fefefe;
+}
+body {
+font: 1.1em "Lato", Verdana, Arial, sans-serif;
+color: #333;
+line-height: 1.4;
+/* text-align: justify; */
+}
+header, nav, article, footer {
+width: 700px;
+margin:0 auto;
+}
+article {
+margin-top: 4em;
+margin-bottom: 4em;
+min-height: 400px;
+}
+footer {
+margin-bottom:50px;
+}
+video {
+margin: 2em 0;
+border:1px solid #ddd;
+}
+nav {
+font-size: .9em;
+font-style: italic;
+border-bottom: 1px solid #ddd;
+padding: 1em 0;
+}
+nav p {
+margin: 0;
+}
+/* Typography
+-------------------------------------------------------- */
+h1 {
+margin-top: 0;
+font-weight: normal;
+}
+h2 {
+margin-top:3em;
+font-weight: normal;
+}
+h3 {
+font-weight: normal;
+font-style: italic;
+margin-top:2em;
+}
+p {
+margin-top:0;
+-webkit-hypens:auto;
+-moz-hypens:auto;
+hyphens:auto;
+}
+ul {
+list-style: square;
+padding-left:1.2em;
+}
+ol {
+padding-left:1.2em;
+}
+blockquote {
+margin-left: 1em;
+padding-left: 1em;
+border-left: 1px solid #ddd;
+}
+code {
+/* font-family: "Consolas", "Menlo", "Monaco", monospace, serif; */
+/* font-size: 0.95em; */
+/* background: white; */
+font-family: monospace;
+font-size: 1.05em;
+background: #f0f0f0;
+padding-left: 0.5em;
+padding-right: 0.5em;
+}
+pre > code{
+background: none;
+padding-left: 0em;
+padding-right: 0em;
+}
+pre {
+font-size: 0.85em;
+margin-left: -2em;
+margin-right: -2em;
+border-top: solid 1px #f0f0f0;
+border-bottom: solid 1px #f0f0f0;
+background-color: #f8f8f8;
+}
+a {
+color: #2484c1;
+text-decoration: none;
+}
+a:hover {
+text-decoration: underline;
+}
+a img {
+border:none;
+}
+h1 a, h1 a:hover {
+color: #333;
+text-decoration: none;
+}
+hr {
+color : #ddd;
+height : 1px;
+margin: 2em 0;
+border-top : solid 1px #ddd;
+border-bottom : none;
+border-left: 0;
+border-right: 0;
+}
+p#heart{
+font-size: 2em;
+line-height: 1;
+text-align: center;
+color: #ccc;
+}
+.red {
+color:#B50000;
+}
+th {
+padding: 0.5em 1em 0.5em 1em;
+background: #cae8ea;
+}
+td {
+padding: 0.5em 1em 0.5em 1em
+}
+/* Home Page
+--------------------------- */
+body#index li {
+margin-bottom: 1em;
+}
+/* iPad
+-------------------------------------------------------- */
+@media only screen and (max-device-width: 1024px) {
+body {
+font-size: 120%;
+line-height: 1.4;
+}
+} /* @iPad */
+/* iPhone
+-------------------------------------------------------- */
+@media only screen and (max-device-width: 480px) {
+body {
+text-align: left;
+}
+article, footer {
+width: auto;
+}
+article {
+padding: 0 10px;
+}
+} /* @iPhone */
+.terminal table td { padding: 5px; }
+.terminal table pre { margin: 0; }
+.terminal {
+background-color: #e0ffc8;
+}
+</style>
+    <title>CSCI 135 - Program 2 - Game Battleship</title>
+  </head>
+  <body>
+    <h1>CSCI 135 - Program 2 - Game Battleship</h1>
+    <h2>Introduction</h2>
+    <p>In this project, you will be implementing a program playing a <em>variant</em>
+      of the game <a
+        href="https://en.wikipedia.org/wiki/Battleship_%28game">Battleship</a>.
+      (You can try to play a very similar game <a
+        href="https://battleship-game.org/en/">here</a>.)</p>
+    <p style="text-align: center;"> <img
+        src="http://i.imgur.com/pDrXFMC.png" alt="Example"></p>
+    <p>Your program is going to play a single-player version of the
+      game, where your task is to sink all ships in the shortest time
+      possible.</p>
+    <p>The submitted programs will compete in a multi-stage <em>tournament</em>,
+      so that you can improve your program. The participation is <em>anonymous
+
+      </em>(to classmates), but counts towards your grade (see bottom).<br>
+    </p>
+    <p style="text-align: center;"> <img
+        src="http://i.imgur.com/8dfYwfC.jpg" alt="Award"></p>
+    <h3>Submission deadlines:</h3>
+    <p>For tournament: <strong>April 7</strong>, <strong>April 19</strong>,
+      <strong>April 22</strong>. <br>
+      Non-tournament (final deadline): <strong>April 22</strong>.</p>
+    <h3>Rules of the game</h3>
+    <p>Ships are placed on a rectangular grid. They <strong>cannot
+        occupy neighboring squares</strong>, but are <strong>allowed to
+        touch diagonally</strong> (see the figure above).</p>
+    <p>The locations of the ships are unknown to you. <strong>Each turn</strong>,
+      you can shoot once at a square of your choice. The computer will
+      respond, telling you whether you <code>MISS</code> or <code>HIT</code>
+      a ship. If all squares of a ship were hit, the computer will tell
+      you that you <code>HIT_AND_SUNK</code> the ship.</p>
+    <p><em>Each time you miss</em>, a new <strong>round</strong>
+      starts.</p>
+    <p>Your goal is to end the game in the <strong>fewest number of
+        rounds</strong>.</p>
+    <p>Hypothetically, if your program never misses, it will win the
+      game in a single round, however this is very unlikely. Still, try
+      to be as efficient as possible. Reducing the number of misses will
+      be your main goal.</p>
+    <h2>How to run the program</h2>
+    <p>Download and unpack the program<br>
+    </p>
+    <pre><code>tar xvzf battleships.tar.gz</code></pre>
+    <p>&nbsp;To build it, while being inside the program’s directory
+      type</p>
+    <pre><code>make<br></code></pre>
+    <p>It creates an executable file named <code>battleships</code>.</p>
+    <p>To run, open an xterm (at least 40 lines and 85 characters wide
+      with default board size) and&nbsp;type:</p>
+    <pre><code>./battleships<br></code></pre>
+    <p>It will start a new game with the board size approximately <code>20</code>
+      by <code>20</code> (it is slightly randomized), and approximately
+      <code>50</code> ships. The ship sizes will be from <code>1</code>
+      to <code>5</code>.</p>
+    <p style="text-align: center;"> <img
+        src="http://i.imgur.com/rDvz7QP.png" alt="Screenshot"></p>
+    <p>Note that it is possible to choose other initial condition,
+      specifying</p>
+    <pre><code>./battleships &lt;rows&gt; &lt;cols&gt; &lt;sml&gt; &lt;lrg&gt; &lt;num&gt; &lt;seed&gt;<br></code></pre>
+    <p>the number of <strong>row</strong>s and <strong>col</strong>umns,
+the
+
+      <strong>small</strong>est and the <strong>large</strong>st ship
+      sizes, the <strong>num</strong>ber of ships, and the random <strong>seed</strong>.
+      The board dimensions cannot be smaller than <code>5</code> or
+      larger than <code>35</code>. If the requested number of ships
+      does not fit on the board, there will be fewer ships.</p>
+    <p>When running the program you can <strong>press the key</strong>
+      <code>[P]</code> to pause, <code>[S]</code> to step one turn, <code>[F]</code>
+      to fast-forward, and <code>[Q]</code> to quit.</p>
+    <p>The <strong>game log</strong> is there primarily for testing and
+      debugging purposes, a replacement for <code>cout</code>, since
+      the normal <code>cout</code> would not work well (and so should
+      not be used). Note that you may output anything you want there to
+      help you debug your program.</p>
+    <h2>The Programming Interface</h2>
+    <p><img src="http://i.imgur.com/XpuQrWu.jpg" style="margin-left:
+        -180px;"></p>
+    <p>As you can see, <strong>the game already implements a certain
+        tactic</strong>, which is definitely not optimal. Improving the
+      tactic will be your main task in this project.</p>
+    <p>Let us explain what you can do.</p>
+    <h3>The <code>bot.cpp</code> file</h3>
+    <p>Open the file <strong><code>bot.cpp</code></strong>. This is the
+      game logic file you will be working on, and <strong>this
+        is the only file you are going to edit and submit</strong>. Keep
+      all the other files unchanged.</p>
+    <p>There are two function you have to implement. The first of them,
+      called <strong><code>init</code></strong>, is executed when the
+      game starts:</p>
+    <pre><code>void init(rows, cols, num, &amp;screen, &amp;log) <br>{<br> ...<br>}<br></code></pre>
+    <ul>
+      <li><code>rows</code>, <code>cols</code>, and <code>num</code>
+        are the dimensions of the board, and the number of ships.</li>
+      <li><code>screen</code> is the game board representation, which
+        you can mark. Here, you can label the locations of the ships, or
+        in principle do anything you want with it. It can help you see
+        what’s going on.</li>
+      <li><code>log</code> is an analog of <code>cout</code>, which
+        lets you print in the corresponding window.</li>
+    </ul>
+    <p>If your program requires any global variables, they can be
+      initialized in the <strong><code>init</code></strong> function as
+      well.</p>
+    <p>The second function, <strong><code>next_turn</code></strong>, is
+      called on each turn, here you can actually shoot at the ships:</p>
+    <pre><code>void next_turn(sml, lrg, num, &amp;gun, &amp;screen, &amp;log) { <br> ...<br>}<br></code></pre>
+    <ul>
+      <li><code>sml</code> and <code>lrg</code> are the sizes of the
+        smallest and the largest ship currently on the board.</li>
+      <li><code>num</code> is the number of ships.</li>
+      <li><code>gun</code> is an object that lets you shoot <strong>once</strong>
+        at the location of your choice if you call <code>gun.shoot(row,
+          column)</code>. The possible returned values are:
+        <ul>
+          <li><code>MISS</code></li>
+          <li><code>HIT</code></li>
+          <li><code>HIT_N_SUNK</code></li>
+          <li><code>ALREADY_HIT</code></li>
+          <li><code>ALREADY_SHOT</code></li>
+        </ul>
+        <p>The first three are self-explanatory. <code>ALREADY_HIT</code>
+          will be returned if you try to shoot at the location where you
+          had already shot in past and hit the ship. <br>
+          <code>ALREADY_SHOT</code> will be returned if you try to shoot
+          multiple times per turn.</p>
+      </li>
+      <li><code>screen</code> and <code>log</code> are the same as in
+        the previous function.</li>
+    </ul>
+    <p>Notice how the <code>screen</code> is used. It <strong>is only
+        a display</strong> that lets you <strong>visualize</strong>
+      what’s going on:</p>
+    <p><code>screen.mark(row, col, ch, color);</code> marks the square
+      (row, col) with the character <code>ch</code>. Possible colors
+      are <code>RED</code>, <code>GREEN</code>, <code>BLUE</code>,
+      and <code>GRAY</code>.</p>
+    <h2>What strategy can you use?</h2>
+    <p style="text-align: center;"> <img
+        src="http://i.imgur.com/UDI4ovS.jpg" alt="Strategy"></p>
+    <p>Implement the best possible playing strategy you can come up
+      with. It should win the games in the fewest number of rounds
+      possible.</p>
+    <p>The only file you can modify and submit is <code>bot.cpp</code>.</p>
+    <p><strong>We are going to test the performance of your programs on
+        two sets of maps:</strong></p>
+    <ul>
+      <li>Maps packed with ships of various sizes from small to large.</li>
+      <li>Maps with only large ships (Use the command line options we
+        mentioned earlier to generate such large-ship maps).</li>
+    </ul>
+    <h3>You are free to choose any strategy. But we can give a few
+      hints. Your solution can gradually evolve from a simple one to a
+      much more complex:</h3>
+    <ol>
+      <li>
+        <p>You can start by shooting at random unexplored spots.</p>
+      </li>
+      <li>
+        <p>Then you can make a global 2D array to store where you hit
+          and where you miss.</p>
+      </li>
+      <li>
+        <p>When you <code>HIT</code> a ship, remember that (or search
+          in the 2D array for such a location) and try shooting around
+          that square on the next turn.</p>
+      </li>
+      <li>
+        <p>When <code>HIT_N_SUNK</code> an entire ship, you can mark
+          the surrounding squares as <code>MISS</code> in your array:</p>
+        <p><img src="http://i.imgur.com/nlG35Uh.png" alt="example"></p>
+      </li>
+      <li>
+        <p>The previous change was a big improvement, but you can do
+          even better. Keep track of where the ships can be and rule out
+          impossible regions. If you know what the smallest and the
+          largest ships are you can make use of this knowledge here. (<em>Test
+            it on maps generated with all large ships.</em>)</p>
+      </li>
+      <li>
+        <p>You can not only rule out impossible squares, but also try to
+          estimate where ships are most likely to be, can’t you?</p>
+      </li>
+      <li>
+        <p>Come up with even better ideas and optimizations, they are
+          possible.</p>
+      </li>
+    </ol>
+    <h2>How to submit</h2>
+    <p><strong>You are to submit a single file <code>bot.cpp</code>.</strong></p>
+    <p>Since we are running the tournament, there will be <strong>three
+        submission days</strong>, each contributing to the final
+      tournament score with the increasing weights: <strong>10%</strong>,
+      <strong>30%</strong>, and <strong>60%</strong>.</p>
+    <ul>
+      <li>1st <em>tournament</em> submission: <strong>by Friday, April
+          7, end of the day</strong>.</li>
+    </ul>
+    <p style="text-align: center;"> [– Spring break interrupts –]</p>
+    <ul>
+      <li>
+        <p>2nd <em>tournament</em> submission: <strong>by Wednesday,
+            April 19, end of the day</strong>.</p>
+      </li>
+      <li>
+        <p>3rd <em>tournament</em> submission: <strong>by Saturday,
+            April 22, end of the day</strong>.</p>
+      </li>
+    </ul>
+    <p>And on the third (and final) submission day, you should <span
+        style="font-weight: bold;">also</span> <strong>submit the code
+        for grading</strong> in your CS-136 (Lab) Blackboard link.</p>
+    <ul>
+      <li><strong>Final <em>non-tournament</em> submission</strong>:
+        same day, Saturday, April 22, end of the day, but submitted at
+        your CS-136 (Lab) Blackboard link for grading.</li>
+    </ul>
+    <h2>GRADING</h2>
+    <p>All 135 and 136 programs this semester will be graded on:</p>
+    <ul>
+      <li><em>Correctness</em>: Does your program work?&nbsp;</li>
+      <li><em>Testing</em>: Have you generated sufficient and good test
+        data to give reasonable confidence that your program works?</li>
+      <li><em>Structure</em>: Have you structured your code to follow
+        proper software engineering guidelines? This includes
+        readability and maintainability. Note that</li>
+      <li><em>Documentation</em>: How well documented is your code? Good
+        documentation does not repeat the code in English, but explains
+        the point of each code block, highlighting any design decisions
+        and/or tricky implementation details.</li>
+    </ul>
+    For this program, a major factor in the correctness component is
+    your performance in the tournaments.
+  </body>
+</html>
